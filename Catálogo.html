@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Catálogo de Produtos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            text-align: center;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
+            margin: 20px;
+        }
+
+        .options {
+            margin-top: 20px;
+        }
+
+        .options button {
+            margin: 5px;
+            padding: 8px 15px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            background-color: #007bff;
+            color: #fff;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .options button:hover {
+            background-color: #0056b3;
+        }
+
+        .info-box {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: -1;
+        }
+
+        .info-box.show {
+            opacity: 1;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Meu Catálogo de Produtos</h1>
+
+        <div class="options">
+            <button onclick="adicionarProduto()">Adicionar Produto</button>
+            <button onclick="buscarProduto()">Buscar Produto</button>
+            <button onclick="atualizarProduto()">Atualizar Produto</button>
+            <button onclick="visualizarTodosProdutos()">Visualizar Todos os Produtos</button>
+            <button onclick="removerProduto()">Remover Produto</button>
+        </div>
+    </div>
+
+    <div class="info-box" id="infoBox"></div>
+
+    <script>
+        let catalogo = [];
+
+        function mostrarInfo(mensagem) {
+            const infoBox = document.getElementById('infoBox');
+            infoBox.textContent = mensagem;
+            infoBox.classList.add('show');
+            setTimeout(() => {
+                infoBox.classList.remove('show');
+            }, 3000);
+        }
+
+        function adicionarProduto() {
+            let nome = prompt("Digite o nome do produto:");
+            let preco = parseFloat(prompt("Digite o preço do produto:"));
+            let descricao = prompt("Digite a descrição do produto:");
+
+            if (nome && preco && descricao) {
+                let produto = {
+                    nome: nome,
+                    preco: preco,
+                    descricao: descricao
+                };
+
+                catalogo.push(produto);
+                mostrarInfo("Produto adicionado com sucesso!");
+            } else {
+                alert("Por favor, preencha todas as informações do produto.");
+            }
+        }
+
+        function buscarProduto() {
+            let nome = prompt("Digite o nome do produto que deseja buscar:");
+
+            if (nome) {
+                let encontrado = catalogo.find(produto => produto.nome.toLowerCase() === nome.toLowerCase());
+
+                if (encontrado) {
+                    mostrarInfo(`Nome: ${encontrado.nome}, Preço: R$ ${encontrado.preco.toFixed(2)}, Descrição: ${encontrado.descricao}`);
+                } else {
+                    mostrarInfo("Produto não encontrado.");
+                }
+            }
+        }
+
+        function atualizarProduto() {
+            let nome = prompt("Digite o nome do produto que deseja atualizar:");
+
+            if (nome) {
+                let encontrado = catalogo.find(produto => produto.nome.toLowerCase() === nome.toLowerCase());
+
+                if (encontrado) {
+                    let novoPreco = parseFloat(prompt("Digite o novo preço do produto:"));
+                    let novaDescricao = prompt("Digite a nova descrição do produto:");
+
+                    if (novoPreco && novaDescricao) {
+                        encontrado.preco = novoPreco;
+                        encontrado.descricao = novaDescricao;
+                        mostrarInfo("Produto atualizado com sucesso!");
+                    } else {
+                        alert("Por favor, preencha todas as informações do produto.");
+                    }
+                } else {
+                    mostrarInfo("Produto não encontrado.");
+                }
+            }
+        }
+
+        function visualizarTodosProdutos() {
+            if (catalogo.length > 0) {
+                let listaProdutos = "Lista de Produtos:\n";
+                catalogo.forEach(produto => {
+                    listaProdutos += `Nome: ${produto.nome}, Preço: R$ ${produto.preco.toFixed(2)}, Descrição: ${produto.descricao}\n`;
+                });
+                alert(listaProdutos);
+            } else {
+                mostrarInfo("Catálogo vazio.");
+            }
+        }
+
+        function removerProduto() {
+            let nome = prompt("Digite o nome do produto que deseja remover:");
+
+            if (nome) {
+                let index = catalogo.findIndex(produto => produto.nome.toLowerCase() === nome.toLowerCase());
+
+                if (index !== -1) {
+                    catalogo.splice(index, 1);
+                    mostrarInfo("Produto removido com sucesso!");
+                } else {
+                    mostrarInfo("Produto não encontrado.");
+                }
+            }
+        }
+    </script>
+</body>
+</html>
